@@ -7,30 +7,38 @@ import {
   TransactionsApiRequestFactory,
   TransactionsApiResponseProcessor,
 } from '@formancehq/formance/dist/apis/TransactionsApi';
+import { FormanceAuthentificationService } from '../services/formance-authentification.service';
 
 export type URL = string;
 
 export abstract class FormanceRepositoryRoot<T> {
-  readonly apiInstance: T;
-  readonly ledgerId: string;
   constructor(
-    url: URL,
-    organizationId: string,
-    ledgerId: string,
-    type: {
-      new (
-        configuration: Configuration,
-        requestFactory?: TransactionsApiRequestFactory,
-        responseProcessor?: TransactionsApiResponseProcessor,
-      ): T;
-    },
-  ) {
+    private readonly url: URL,
+    private readonly organizationId: string,
+    protected readonly ledgerId: string,
+  ) {}
+
+  async getInstance(type: {
+    new (
+      configuration: Configuration,
+      requestFactory?: TransactionsApiRequestFactory,
+      responseProcessor?: TransactionsApiResponseProcessor,
+    ): T;
+  }): Promise<T> {
+    const formanceAuthentificationService: FormanceAuthentificationService =
+      new FormanceAuthentificationService(this.url);
+    const { access_token: accessToken } =
+      await formanceAuthentificationService.getAuth();
     const configuration: Configuration = createConfiguration({
-      baseServer: new ServerConfiguration(url, {
-        organization: organizationId,
+      baseServer: new ServerConfiguration(this.url, {
+        organization: this.organizationId,
       }),
+      authMethods: {
+        Authorization: {
+          accessToken: accessToken,
+        },
+      },
     });
-    this.apiInstance = new type(configuration);
-    this.ledgerId = ledgerId;
+    return new type(configuration);
   }
 }

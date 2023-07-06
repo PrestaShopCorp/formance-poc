@@ -1,73 +1,36 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+## Note
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Test curl
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+curl -X POST "https://xzichesmgpyj-cgth.sandbox.formance.cloud/api/ledger/quickstart/transactions" -d '{"timestamp":"2023-07-06T13:46:00.356Z","postings":[{"amount":1000,"asset":"EUR/2","destination":"prestashop:merchant:ZcJJ7lTP63WA6ttf:order:FR1435173","source":"merchant:ZcJJ7lTP63WA6ttf:order:FR1435173"}],"metadata":{"productId":"rbm_example","shopUuid":"fbe25d33-6323-4d93-bcee-8eb92f26d4fe","amount":"1000EUR/2"}}'
 
-## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+client / secret : f382034a-2994-4832-a583-e4baac6e0962 / ff13eed4-1e2f-46ec-95db-ba0b832d9ed7
 
-## Installation
 
-```bash
-$ yarn install
-```
 
-## Running the app
+curl --location 'https://xzichesmgpyj-cgth.sandbox.formance.cloud/api/ledger/quickstart/transactions' \
+--header 'Authorization: Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6ImlkIn0.eyJpc3MiOiJodHRwczovL3h6aWNoZXNtZ3B5ai1jZ3RoLnNhbmRib3guZm9ybWFuY2UuY2xvdWQvYXBpL2F1dGgiLCJhdWQiOlsiZjM4MjAzNGEtMjk5NC00ODMyLWE1ODMtZTRiYWFjNmUwOTYyIl0sImV4cCI6MTY4ODY1NTU0NywiaWF0IjoxNjg4NjUxOTQ3LCJuYmYiOjE2ODg2NTE5NDcsImp0aSI6ImJkNTNiYjZjLTA3YTMtNDcyMi04YjQ5LTMxMDQ1ODg2YWY5YSJ9.H8ZRBXk_hh0mnatGJu8YWoxPwciyOkHjFt8k88QN56otsRTmHMLUKbDTlp4uavmdHCriToPyg4RZg6LudB5oawuIJj-u_SUIRa7WNdfxCuv71VZ3IeQFfeQQpmievcVHNwHaiEPJuCf2GGClDdQ2n-PT4myrna7-3UKWjKJrqZ6_nraP6i68TmbFhv5FcnpjDMgYhlLmSoqjw_sQ3-pe7cilou7gKwDaptn7kcGiiDMPJHhYbQROU7k9s_o7Q6IelM975suIZ8fk0_LnOxwFwHDs1ZQugIj7bu3FmFi9Eic-KBbtf2MCVApyHTwDoFctUCz5MmoIPhJrGtEtRw1Cmw' \
+--header 'Content-Type: application/json' \
+--data '{
+	"timestamp": "2023-07-06T13:46:00.356Z",
+	"postings": [{
+		"amount": 1000,
+		"asset": "EUR/2",
+		"destination": "prestashop:merchant:ZcJJ7lTP63WA6ttf:order:FR1435173",
+		"source": "merchant:ZcJJ7lTP63WA6ttf:order:FR1435173"
+	}],
+	"metadata": {
+		"productId": "rbm_example",
+		"shopUuid": "fbe25d33-6323-4d93-bcee-8eb92f26d4fe",
+		"amount": "1000EUR/2"
+	}
+}'
 
-```bash
-# development
-$ yarn run start
-
-# watch mode
-$ yarn run start:dev
-
-# production mode
-$ yarn run start:prod
-```
-
-## Test
-
-```bash
-# unit tests
-$ yarn run test
-
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+=> erreur 
+{
+    "errorCode": "INSUFFICIENT_FUND",
+    "errorMessage": "balance.insufficient.EUR/2",
+    "error_code": "INSUFFICIENT_FUND",
+    "error_message": "balance.insufficient.EUR/2"
+}
