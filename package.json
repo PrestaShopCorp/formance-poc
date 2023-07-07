@@ -24,7 +24,7 @@
     "@formancehq/formance": "~1.0.20230301",
     "@nestjs/common": "^8.0.0",
     "@nestjs/config": "~3.0.0",
-    "@nestjs/core": "^8.0.0",
+    "@nestjs/core": "^9.0.5",
     "@nestjs/platform-express": "^8.0.0",
     "axios": "~1.4.0",
     "joi": "~17.9.2",
