@@ -1,15 +1,17 @@
-export type TransactionAccount = string;
-export type Currency = 'EUR/2';
-export type Amount = number;
-export type TransactionMetadata = Record<string, unknown>;
+import { AccountId } from '@domain/types/account-id';
+import { Amount } from '@domain/types/amount';
+import { Currency } from '@domain/types/currency';
+import { Metadata } from '@domain/types/metadata';
+
+export type TransactionMetadata = Metadata;
 
 export interface Transaction {
   id: string;
 }
 
 export interface CreateTransactionValueObject {
-  from: TransactionAccount;
-  to: TransactionAccount;
+  from: AccountId;
+  to: AccountId;
   amount: Amount;
   currency: Currency;
 }

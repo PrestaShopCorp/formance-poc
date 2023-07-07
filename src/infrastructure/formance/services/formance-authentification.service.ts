@@ -1,23 +1,27 @@
 import axios, { AxiosResponse } from 'axios';
 import { URL } from '../repositories/formance-repository.root';
+import { ConfigService } from '@nestjs/config';
 
 export interface Authentication {
   access_token: string;
   token_type: 'Bearer';
   expires_in: number;
 }
-
+export interface OAuthCredentials {
+  clientId: string;
+  secretId: string;
+}
 export class FormanceAuthentificationService {
-  private readonly clientId = 'f382034a-2994-4832-a583-e4baac6e0962';
-  private readonly secretId = 'ff13eed4-1e2f-46ec-95db-ba0b832d9ed7';
-
-  constructor(private readonly url: URL) {}
+  constructor(
+    private readonly credentials: OAuthCredentials,
+    private readonly url: URL,
+  ) {}
 
   async getAuth(): Promise<Authentication> {
     const formData = new FormData();
     formData.append('grant_type', 'client_credentials');
-    formData.append('client_id', this.clientId);
-    formData.append('client_secret', this.secretId);
+    formData.append('client_id', this.credentials.clientId);
+    formData.append('client_secret', this.credentials.secretId);
     const { status, data }: AxiosResponse<Authentication> =
       await axios<Authentication>({
         method: 'post',
@@ -25,7 +29,6 @@ export class FormanceAuthentificationService {
         data: formData,
         headers: { 'Content-Type': 'multipart/form-data' },
       });
-    console.log('data', data);
     if (status === 200) {
       return data;
     }

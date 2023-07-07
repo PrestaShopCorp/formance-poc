@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { FormanceModule } from '@infrastructure/formance/formance.module';
-import { TransactionsController } from './controllers/commission.controller';
+import { PaymentsController } from './payments.controller';
 
 @Module({
   imports: [FormanceModule],
-  controllers: [TransactionsController],
+  controllers: [PaymentsController],
 })
-export class TransactionsModule {}
+export class PaymentsModule {}

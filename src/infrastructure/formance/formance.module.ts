@@ -3,10 +3,13 @@ import { FormanceTransactionRepository } from './repositories/formance-transacti
 import { ConfigModule } from '@nestjs/config';
 import { ITransactionRepository } from '@domain/repositories/transaction.repository';
 import { configuration } from './formance.configuration';
+import { FormanceCommissionRepository } from './repositories/formance-commission.repository';
+import { ICommissionRepository } from '@domain/repositories/commission.repository';
 // import Joi from 'joi';
 
 const services = [
   { provide: ITransactionRepository, useClass: FormanceTransactionRepository },
+  { provide: ICommissionRepository, useClass: FormanceCommissionRepository },
 ];
 
 @Module({

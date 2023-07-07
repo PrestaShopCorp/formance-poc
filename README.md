@@ -34,3 +34,6 @@ curl --location 'https://xzichesmgpyj-cgth.sandbox.formance.cloud/api/ledger/qui
     "error_code": "INSUFFICIENT_FUND",
     "error_message": "balance.insufficient.EUR/2"
 }
+
+---
+Création transaction from world ne check pas les fonds

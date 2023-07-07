@@ -5,9 +5,12 @@ declare global {
   namespace NodeJS {
     interface ProcessEnv {
       NODE_ENV: 'development' | 'production' | 'test';
+      APP_PORT: string;
       LEDGER_ID: string;
       LEDGER_URL: string;
       LEDGER_ORGANIZATION_ID: string;
+      LEDGER_CLIENT_ID: string;
+      LEDGER_SECRET_ID: string;
     }
   }
 }

@@ -4,15 +4,16 @@ import {
   createConfiguration,
 } from '@formancehq/formance';
 import {
-  TransactionsApiRequestFactory,
-  TransactionsApiResponseProcessor,
-} from '@formancehq/formance/dist/apis/TransactionsApi';
-import { FormanceAuthentificationService } from '../services/formance-authentification.service';
+  FormanceAuthentificationService,
+  OAuthCredentials,
+} from '../services/formance-authentification.service';
+import { BaseAPIRequestFactory } from '@formancehq/formance/dist/apis/baseapi';
 
 export type URL = string;
 
 export abstract class FormanceRepositoryRoot<T> {
   constructor(
+    private readonly credentials: OAuthCredentials,
     private readonly url: URL,
     private readonly organizationId: string,
     protected readonly ledgerId: string,
@@ -21,12 +22,13 @@ export abstract class FormanceRepositoryRoot<T> {
   async getInstance(type: {
     new (
       configuration: Configuration,
-      requestFactory?: TransactionsApiRequestFactory,
-      responseProcessor?: TransactionsApiResponseProcessor,
+      requestFactory?: any,
+      responseProcessor?: any,
     ): T;
   }): Promise<T> {
     const formanceAuthentificationService: FormanceAuthentificationService =
-      new FormanceAuthentificationService(this.url);
+      new FormanceAuthentificationService(this.credentials, this.url);
+
     const { access_token: accessToken } =
       await formanceAuthentificationService.getAuth();
     const configuration: Configuration = createConfiguration({
