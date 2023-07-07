@@ -1,16 +1,16 @@
 import { ScriptApi } from '@formancehq/formance';
 import { FormanceRepositoryRoot } from './formance-repository.root';
-import { TransactionMetadata } from '@domain/repositories/transaction.repository';
+import { Transaction } from '@domain/repositories/transaction.repository';
 import { ConfigService } from '@nestjs/config';
 import { FormanceConfig, formanceConfig } from '../formance.configuration';
 import { isUndefined } from '@lib/guards/is-undefined';
 import { Injectable } from '@nestjs/common';
 import {
-  Commission,
   CommissionMetadata,
   CreateCommissionValueObject,
   ICommissionRepository,
 } from '@domain/repositories/commission.repository';
+import { formanceTransactionToTransaction } from '../mappers/formance-transaction.mapper';
 
 @Injectable()
 export class FormanceCommissionRepository
@@ -35,10 +35,9 @@ export class FormanceCommissionRepository
   async applyCommission(
     createPayload: CreateCommissionValueObject,
     metadata?: CommissionMetadata,
-  ): Promise<Commission> {
-    const response = await (
-      await this.getInstance(ScriptApi)
-    ).runScript({
+  ): Promise<Transaction> {
+    const instance = await this.getInstance(ScriptApi);
+    const response = await instance.runScript({
       ledger: this.ledgerId,
       script: {
         reference: createPayload.reference,
@@ -47,30 +46,13 @@ export class FormanceCommissionRepository
         vars: createPayload.vars,
       },
     });
-    return response as any;
-  }
-
-  async createWithScript(metadata?: TransactionMetadata): Promise<any> {
-    // const { data } = await (
-    //   await this.getInstance(ScriptApi)
-    // ).runScript({
-    //   ledger: this.ledgerId,
-    //   script: {
-    //     reference: 'anything',
-    //     metadata: metadata,
-    //     plain: `vars {
-    //       account $user
-    //       }
-    //       send [COIN 1000] (
-    //         source = @world
-    //         destination = $user
-    //       )
-    //       `,
-    //     vars: {
-    //       user: 'toto',
-    //     },
-    //   },
-    // });
-    // return data;
+    // valeurs possibles 'INSUFFICIENT_FUND' 'INTERNAL' 'CONFLICT' (2 références identiques)
+    // if (response.errorCode) {
+    //   throw new Error(`${response.errorMessage}`);
+    // }
+    if (isUndefined(response.transaction)) {
+      throw new Error('Undefined transaction');
+    }
+    return formanceTransactionToTransaction(response.transaction);
   }
 }

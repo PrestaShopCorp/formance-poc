@@ -1,0 +1,4 @@
+send [COIN 100] (
+  source = @merchant:ZcJJ7lTP63WA6ttf:order:FR1435173
+  destination = @prestashop:merchant:ZcJJ7lTP63WA6ttf:order:FR1435173
+)

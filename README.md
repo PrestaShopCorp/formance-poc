@@ -37,3 +37,7 @@ curl --location 'https://xzichesmgpyj-cgth.sandbox.formance.cloud/api/ledger/qui
 
 ---
 Création transaction from world ne check pas les fonds
+
+Debug
+
+https://play.numscript.org/?payload=eyJlcnJvciI6Ilx1MDAxYlszMW0tLVx1MDAzZVx1MDAxYlswbSBlcnJvcjoxOjE1XHJcbiAgXHUwMDFiWzM0bXxcdTAwMWJbMG1cclxuXHUwMDFiWzMxbTEgfCBcdTAwMWJbMG1cdTAwMWJbOTBtc2VuZCBbQ09JTiAxMDAwXHUwMDFiWzBtfVx1MDAxYls5MG1dIChcclxuXHUwMDFiWzBtICBcdTAwMWJbMzRtfFx1MDAxYlswbSAgICAgICAgICAgICAgICBcdTAwMWJbMzFtXlx1MDAxYlswbSBleHRyYW5lb3VzIGlucHV0ICd9JyBleHBlY3RpbmcgJ10nXHJcbiJ9

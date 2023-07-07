@@ -13,7 +13,7 @@ export class TransactionsController {
   ) {}
 
   @Post()
-  async createCommission(): Promise<TransactionDto> {
+  async createCommission(): Promise<any> {
     const transaction = await this.commissionRepository.applyCommission(
       {
         reference: 'order:FR1435173',
@@ -31,6 +31,6 @@ export class TransactionsController {
         amount: '1000EUR/2',
       },
     );
-    return transactionToTransactionDto(transaction);
+    return transaction;
   }
 }
