@@ -41,3 +41,44 @@ Création transaction from world ne check pas les fonds
 Debug
 
 https://play.numscript.org/?payload=eyJlcnJvciI6Ilx1MDAxYlszMW0tLVx1MDAzZVx1MDAxYlswbSBlcnJvcjoxOjE1XHJcbiAgXHUwMDFiWzM0bXxcdTAwMWJbMG1cclxuXHUwMDFiWzMxbTEgfCBcdTAwMWJbMG1cdTAwMWJbOTBtc2VuZCBbQ09JTiAxMDAwXHUwMDFiWzBtfVx1MDAxYls5MG1dIChcclxuXHUwMDFiWzBtICBcdTAwMWJbMzRtfFx1MDAxYlswbSAgICAgICAgICAgICAgICBcdTAwMWJbMzFtXlx1MDAxYlswbSBleHRyYW5lb3VzIGlucHV0ICd9JyBleHBlY3RpbmcgJ10nXHJcbiJ9
+
+
+
+curl --location 'localhost:3000/payments' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  "buyer": {
+    "shop": {
+      "uuid": "fbe25d33-6323-4d93-bcee-8eb92f26d4fe"
+    },
+    "organization": {
+      "uuid": "ZcJJ7lTP63WA6ttf",
+			"email": "john.do@mail.fr"
+    }
+  },
+  "seller": {
+    "organization": {
+			"uuid": "199UIoTjJSqLI2MCS",
+			"email": "john.do@partner.com"
+		}
+  },
+  "product": {
+		"id": "builtfor_example",
+		"type": "builtfor"
+	},
+  "invoice": {
+    "id": "FR123456",
+    "amount": 1000,
+    "currency": "EUR/2"
+  }
+}
+'
+
+
+Stocker l'id de wallet, ou du moins stocker quelque part une correspondance wallet <=> partner
+
+
+
+Solution :
+* Nécessite un projet chez nous qui à partir d'un payement exécute le calcule de commission dans Formance
+* 

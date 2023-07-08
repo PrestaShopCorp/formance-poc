@@ -8,7 +8,7 @@ export interface Commission {
   id: string;
 }
 
-type Var = Record<string, string>;
+type Var = Record<string, string | number>;
 type Vars = Record<string, string | Var>;
 
 export interface CreateCommissionValueObject {

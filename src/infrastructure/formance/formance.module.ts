@@ -5,11 +5,14 @@ import { ITransactionRepository } from '@domain/repositories/transaction.reposit
 import { configuration } from './formance.configuration';
 import { FormanceCommissionRepository } from './repositories/formance-commission.repository';
 import { ICommissionRepository } from '@domain/repositories/commission.repository';
+import { IWalletRepository } from '@domain/repositories/wallet.repository';
+import { FormanceWalleRepository } from './repositories/formance-wallet.repository';
 // import Joi from 'joi';
 
 const services = [
   { provide: ITransactionRepository, useClass: FormanceTransactionRepository },
   { provide: ICommissionRepository, useClass: FormanceCommissionRepository },
+  { provide: IWalletRepository, useClass: FormanceWalleRepository },
 ];
 
 @Module({

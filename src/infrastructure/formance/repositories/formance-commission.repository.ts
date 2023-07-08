@@ -47,9 +47,9 @@ export class FormanceCommissionRepository
       },
     });
     // valeurs possibles 'INSUFFICIENT_FUND' 'INTERNAL' 'CONFLICT' (2 références identiques)
-    // if (response.errorCode) {
-    //   throw new Error(`${response.errorMessage}`);
-    // }
+    if (response.errorCode) {
+      throw new Error(`${response.errorMessage}`);
+    }
     if (isUndefined(response.transaction)) {
       throw new Error('Undefined transaction');
     }

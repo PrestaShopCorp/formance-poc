@@ -6,9 +6,10 @@ import { Body, Controller, Inject, Post } from '@nestjs/common';
 import {
   TransactionDto,
   transactionToTransactionDto,
-} from '../transactions/dtos/transaction.dto';
+} from './dtos/transaction.dto';
 import { CreatePaymentDto } from './create-payment.dto';
 import { ICommissionRepository } from '@domain/repositories/commission.repository';
+import { IWalletRepository } from '@domain/repositories/wallet.repository';
 
 @Controller({ path: 'payments' })
 export class PaymentsController {
@@ -17,6 +18,8 @@ export class PaymentsController {
     private readonly transactionRepository: ITransactionRepository,
     @Inject(ICommissionRepository)
     private readonly commissionRepository: ICommissionRepository,
+    @Inject(IWalletRepository)
+    private readonly walletRepository: IWalletRepository,
   ) {}
 
   /**
@@ -62,6 +65,7 @@ export class PaymentsController {
     const sellerId = `seller:${seller.organization.uuid}:order:${invoice.id}`;
     const transactions: Transaction[] = [];
 
+    // World to merchant
     transactions.push(
       await this.transactionRepository.createTransaction(
         {
@@ -77,79 +81,75 @@ export class PaymentsController {
         },
       ),
     );
-    //     transactions.push(
-    //       await this.commissionRepository.applyCommission({
-    //         reference: `order:${invoice.id}`,
-    //         plain: `vars {
-    //   monetary $amount
-    //   account $merchant
-    //   account $merchantPrestashop
-    // }
-    // send $amount (
-    //   source = $merchant
-    //   destination = $merchantPrestashop
-    // )
-    // `,
-    //         vars: {
-    //           amount: `${invoice.currency} ${invoice.amount}`,
-    //           merchant: `@${merchantExternalId}`,
-    //           merchantPrestashop: `@${merchantPrestashopId}`,
-    //         },
-    //       }),
-    //     );
+
+    // Merchant to prestashop merchant
     transactions.push(
       await this.commissionRepository.applyCommission({
         reference: `order:${invoice.id}:${Date.now()}`,
-        plain: `
-send [${invoice.currency} ${invoice.amount}] (
-  source = @${merchantExternalId}
-  destination = @${merchantPrestashopId}
-)
-`,
+        plain: `vars {
+      monetary $amount
+      account $merchant
+      account $merchantprestashop
+    }
+    send $amount (
+      source = $merchant
+      destination = $merchantprestashop
+    )
+    `,
+        vars: {
+          amount: {
+            amount: invoice.amount,
+            asset: invoice.currency,
+          },
+          merchant: `${merchantExternalId}`,
+          merchantprestashop: `${merchantPrestashopId}`,
+        },
       }),
     );
+
+    // Prestashop merchant to prestashop commission and partner
     transactions.push(
       await this.commissionRepository.applyCommission({
-        reference: `split:order:${invoice.id}`,
-        plain: `
-send [${invoice.currency} ${invoice.amount}] (
-    source = @${merchantPrestashopId}
+        reference: `split:order:${invoice.id}:${Date.now()}`,
+        plain: `vars {
+  monetary $amount
+  account $merchant
+  account $seller
+  account $prestashop
+}
+send $amount (
+    source = $merchant
     destination = {
-      70% to @${sellerId}
-      remaining to @commission:prestashop:${product.type}
+      70% to $seller
+      remaining to $prestashop
     }
 )
-`,
+        `,
+        vars: {
+          amount: {
+            amount: invoice.amount,
+            asset: invoice.currency,
+          },
+          merchant: `${merchantPrestashopId}`,
+          seller: `${sellerId}`,
+          prestashop: `commission:prestashop:${product.type}`,
+        },
       }),
     );
-    //     transactions.push(
-    //       await this.commissionRepository.applyCommission({
-    //         reference: `split:order:${invoice.id}`,
-    //         plain: `vars {
-    //   monetary $amount
-    //   account $merchant
-    //   account $seller
-    //   account $prestashop
-    // }
-    // send $amount (
-    //     source = $merchant
-    //     destination = {
-    //       70% to $seller
-    //       remaining to $prestashop
-    //     }
-    // )
-    //         `,
-    //         vars: {
-    //           amount: {
-    //             amount: invoice.amount.toString(),
-    //             currency: invoice.currency,
-    //           },
-    //           merchant: `@${merchantPrestashopId}`,
-    //           seller: `@${sellerId}`,
-    //           prestashop: `commission:prestashop:${product.type}`,
-    //         },
-    //       }),
-    //     );
+
+    // Transfer to wallet on ledger wallet-002
+    const walletId = `ba5d360a-90b6-4178-b199-27b69069ad30`; //`seller:${seller.organization.uuid}`;
+    const wallet = await this.walletRepository.getWallet(walletId);
+    if (!wallet) {
+      await this.walletRepository.createWallet({ id: walletId }); // the id here is the name
+    }
+    await this.walletRepository.creditWallet(
+      walletId,
+      invoice.amount,
+      invoice.currency,
+      sellerId,
+    );
+
     return transactions.map((transaction) =>
       transactionToTransactionDto(transaction),
     );
